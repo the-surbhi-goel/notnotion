@@ -10,6 +10,7 @@ import {
   orderBy,
   query,
   serverTimestamp,
+  updateDoc,
   where,
 } from "firebase/firestore";
 
@@ -88,5 +89,22 @@ deleteForm.addEventListener("submit", (event) => {
   deleteDoc(docRef).then(() => {
     alert("Movie Deleted");
     deleteForm.reset();
+  });
+});
+
+// Update a document
+const updateForm = document.querySelector(".updateMovie");
+updateForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+  const docRef = doc(db, "movies", updateForm.id.value);
+
+  updateDoc(docRef, {
+    name: updateForm.name.value,
+    description: updateForm.description.value,
+    category: updateForm.category.value,
+    updatedAt: serverTimestamp(),
+  }).then(() => {
+    alert("Movie Updated");
+    updateForm.reset();
   });
 });
