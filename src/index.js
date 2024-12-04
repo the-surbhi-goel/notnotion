@@ -13,6 +13,12 @@ import {
   updateDoc,
   where,
 } from "firebase/firestore";
+import {
+  createUserWithEmailAndPassword,
+  getAuth,
+  signInWithEmailAndPassword,
+  signOut,
+} from "firebase/auth";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -27,9 +33,11 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore();
+const auth = getAuth();
+
 const collectionRef = collection(db, "movies");
 const dramaQRef = query(collectionRef, where("category", "==", "drama"), orderBy("createdAt"));
-const singleDocRef = collection(db, "movies", "any-document-id");
+// const singleDocRef = collection(db, "movies", "any-document-id"); //uncomment it to check
 
 // Get Document
 getDocs(collectionRef)
@@ -108,4 +116,42 @@ updateForm.addEventListener("submit", (event) => {
     alert("Movie Updated");
     updateForm.reset();
   });
+});
+
+// Register
+const registerForm = document.querySelector(".signUp");
+registerForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+
+  createUserWithEmailAndPassword(auth, registerForm.email.value, registerForm.password.value)
+    .then((cred) => {
+      console.log(cred);
+      registerForm.reset();
+    })
+    .catch((error) => console.log(error));
+});
+
+// SignIn
+const signInForm = document.querySelector(".signIn");
+signInForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+
+  signInWithEmailAndPassword(auth, signInForm.email.value, signInForm.password.value)
+    .then((cred) => {
+      console.log(cred);
+      signInForm.reset();
+    })
+    .catch((error) => console.log(error));
+});
+
+// Logout
+const logoutForm = document.querySelector(".logout");
+logoutForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+
+  signOut(auth)
+    .then(() => {
+      console.log("Logged Out");
+    })
+    .catch((error) => console.log(error));
 });
