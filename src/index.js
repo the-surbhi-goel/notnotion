@@ -7,6 +7,10 @@ import {
   getDocs,
   getFirestore,
   onSnapshot,
+  orderBy,
+  query,
+  serverTimestamp,
+  where,
 } from "firebase/firestore";
 
 // Your web app's Firebase configuration
@@ -23,6 +27,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore();
 const collectionRef = collection(db, "movies");
+const dramaQRef = query(collectionRef, where("category", "==", "drama"), orderBy("createdAt"));
 
 // Get Document
 getDocs(collectionRef)
@@ -34,6 +39,19 @@ getDocs(collectionRef)
     console.log(" movies ", movies);
   })
   .catch((error) => console.log(error));
+
+// Get Document related to drama category
+/*
+getDocs(dramaQRef)
+.then((data) => {
+  let movies = [];
+  data.docs.forEach((element) => {
+    movies.push({ ...element.data(), id: element.id });
+  });
+  console.log("drama movies ", movies);
+})
+.catch((error) => console.log(error));
+*/
 
 // It'll call automatically after any call
 onSnapshot(collectionRef, (data) => {
@@ -52,6 +70,9 @@ addForm.addEventListener("submit", (event) => {
   addDoc(collectionRef, {
     name: addForm.name.value,
     description: addForm.description.value,
+    category: addForm.category.value,
+    createdAt: serverTimestamp(),
+    updatedAt: serverTimestamp(),
   }).then(() => {
     alert("Movie Added");
     addForm.reset();
