@@ -1,4 +1,5 @@
 import { initializeApp } from "firebase/app";
+import { collection, getDocs, getFirestore } from "firebase/firestore";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -7,8 +8,21 @@ const firebaseConfig = {
   projectId: "notnotion-2584b",
   storageBucket: "notnotion-2584b.firebasestorage.app",
   messagingSenderId: "755531495491",
-  appId: "1:755531495491:web:86eaa78a639eac06f37cf6"
+  appId: "1:755531495491:web:86eaa78a639eac06f37cf6",
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+const db = getFirestore();
+const collectionRef = collection(db, "movies");
+
+// Get Document
+getDocs(collectionRef)
+  .then((data) => {
+    let movies = [];
+    data.docs.forEach((element) => {
+      movies.push({ ...element.data(), id: element.id });
+    });
+    console.log(" movies ", movies);
+  })
+  .catch((error) => console.log(error));
