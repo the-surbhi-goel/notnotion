@@ -1,11 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Firbase</title>
+    <link rel="stylesheet" href="index.css">
 </head>
+
 <body>
+
+    <form class="addMovie">
+        <h2>Add a Movie</h2>
+        <input type="text" name="name" placeholder="Movie Name" autocomplete="off" />
+        <input type="text" name="description" placeholder="Movie Description" autocomplete="off" />
+        <input type="submit" value="Add Movie" />
+    </form>
+
+
+    <form class="deleteMovie">
+        <h2>Delete a Movie</h2>
+        <input type="text" name="id" placeholder="Movie Id" autocomplete="off" />
+        <input type="submit" value="Delete Movie" />
+    </form>
+
     <script src="bundle.js"></script>
 </body>
+
 </html>

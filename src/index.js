@@ -1,5 +1,13 @@
 import { initializeApp } from "firebase/app";
-import { collection, getDocs, getFirestore } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  getDocs,
+  getFirestore,
+  onSnapshot,
+} from "firebase/firestore";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -26,3 +34,38 @@ getDocs(collectionRef)
     console.log(" movies ", movies);
   })
   .catch((error) => console.log(error));
+
+// It'll call automatically after any call
+onSnapshot(collectionRef, (data) => {
+  console.log("changes");
+  let movies = [];
+  data.docs.forEach((element) => {
+    movies.push({ ...element.data(), id: element.id });
+  });
+  console.log(" movies ", movies);
+});
+
+//   Adding a document
+const addForm = document.querySelector(".addMovie");
+addForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+  addDoc(collectionRef, {
+    name: addForm.name.value,
+    description: addForm.description.value,
+  }).then(() => {
+    alert("Movie Added");
+    addForm.reset();
+  });
+});
+
+// Delete a document
+const deleteForm = document.querySelector(".deleteMovie");
+deleteForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+  const docRef = doc(db, "movies", deleteForm.id.value);
+
+  deleteDoc(docRef).then(() => {
+    alert("Movie Deleted");
+    deleteForm.reset();
+  });
+});
