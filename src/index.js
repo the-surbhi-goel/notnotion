@@ -29,6 +29,7 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore();
 const collectionRef = collection(db, "movies");
 const dramaQRef = query(collectionRef, where("category", "==", "drama"), orderBy("createdAt"));
+const singleDocRef = collection(db, "movies", "any-document-id");
 
 // Get Document
 getDocs(collectionRef)
